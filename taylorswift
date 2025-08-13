@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taylor Swift Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fdf6fb;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .quiz-container {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      padding: 30px;
+      max-width: 600px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      color: #d6336c;
+    }
+    .question {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .answers button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      font-size: 1rem;
+      border: 2px solid #d6336c;
+      border-radius: 5px;
+      background: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .answers button:hover {
+      background: #d6336c;
+      color: #fff;
+    }
+    .score-container {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #d6336c;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Taylor Swift Quiz</h1>
+    <div id="quiz">
+      <div class="question" id="question"></div>
+      <div class="answers" id="answers"></div>
+    </div>
+    <div class="score-container" id="score-container" style="display:none;"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      { question: "In welchem Jahr wurde Taylor Swift geboren?", answers: ["1987","1989","1991","1993"], correct: 1 },
+      { question: "Welches war Taylor Swifts erstes Album?", answers: ["Fearless","Speak Now","Taylor Swift","Red"], correct: 2 },
+      { question: "In welcher Stadt wurde Taylor Swift geboren?", answers: ["Los Angeles","Reading, Pennsylvania","Nashville","New York"], correct: 1 },
+      { question: "Welches Tier ist Taylors berühmtes Erkennungszeichen?", answers: ["Hund","Katze","Schwan","Fuchs"], correct: 1 },
+      { question: "Mit welchem Song gewann Taylor ihren ersten Grammy für „Album des Jahres“?", answers: ["Love Story","Fearless","You Belong With Me","All Too Well"], correct: 1 },
+      { question: "Wie viele Studioalben hat Taylor Swift bis 2025 veröffentlicht?", answers: ["9","10","12","13"], correct: 3 },
+      { question: "Welcher Song gilt als Taylors längster Song?", answers: ["All Too Well (10 Minute Version)","Enchanted","New Year’s Day","Long Live"], correct: 0 },
+      { question: "Mit welchem Schauspieler hatte Taylor Swift eine berühmte Beziehung, die oft in Songs verarbeitet wurde?", answers: ["Joe Jonas","Jake Gyllenhaal","Tom Hiddleston","Alle oben genannten"], correct: 3 },
+      { question: "In welchem Jahr erschien das Album 1989?", answers: ["2012","2013","2014","2015"], correct: 1 },
+      { question: "Welche Farbe wird oft mit Taylors „Red“-Album assoziiert?", answers: ["Blau","Rot","Grün","Gelb"], correct: 1 },
+      { question: "Welcher Song ist Taylor Swifts erster Nummer-1-Hit in den USA?", answers: ["Love Story","You Belong With Me","Our Song","Teardrops on My Guitar"], correct: 2 },
+      { question: "Welches Pseudonym benutzte Taylor Swift für das Co-Writing von Songs auf Folklore und Evermore?", answers: ["Nils Sjoberg","William Bowery","Jack Antonoff","Ellie Swift"], correct: 1 },
+      { question: "Welches Taylor-Song-Video zeigt sie in einem Labyrinth und auf einem Pferd?", answers: ["Out of the Woods","Look What You Made Me Do","…Ready For It?","Wildest Dreams"], correct: 0 },
+      { question: "Wie lautet der vollständige Name von Taylor Swift?", answers: ["Taylor Alison Swift","Taylor Marie Swift","Taylor Anne Swift","Taylor Elizabeth Swift"], correct: 0 },
+      { question: "Welche Tour war Taylors erste Welttournee?", answers: ["Fearless Tour","Speak Now World Tour","Red Tour","Reputation Stadium Tour"], correct: 1 },
+      { question: "Taylor Swift hat mehrere „Taylor’s Version“-Alben neu aufgenommen. Welches Album erschien als erstes in dieser Version?", answers: ["Fearless","Red","Speak Now","1989"], correct: 0 },
+      { question: "In welchem Jahr gewann sie den CMA Award als „Entertainer of the Year“ zum ersten Mal?", answers: ["2009","2011","2013","2015"], correct: 1 },
+      { question: "Welches bekannte Taylor Swift-Zitat stammt aus dem Song „The Archer“?", answers: ["I wake up lonely every day","I’ve been the archer, I’ve been the prey","Darling, I’m a nightmare dressed like a daydream","You call me up again just to break me like a promise"], correct: 1 },
+      { question: "Wie viele Kinderbücher hat Taylor Swift veröffentlicht?", answers: ["0","1","2","3"], correct: 0 },
+      { question: "Auf welchem Album ist der Song The Last Great American Dynasty?", answers: ["Folklore","Evermore","Lover","Red"], correct: 0 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = quizData[currentQuestion];
+      document.getElementById('question').innerText = q.question;
+      const answersDiv = document.getElementById('answers');
+      answersDiv.innerHTML = '';
+      q.answers.forEach((answer, index) => {
+        const btn = document.createElement('button');
+        btn.innerText = answer;
+        btn.onclick = () => selectAnswer(index);
+        answersDiv.appendChild(btn);
+      });
+    }
+
+    function selectAnswer(index) {
+      if(index === quizData[currentQuestion].correct) score++;
+      currentQuestion++;
+      if(currentQuestion < quizData.length) {
+        showQuestion();
+      } else {
+        showScore();
+      }
+    }
+
+    function showScore() {
+      document.getElementById('quiz').style.display = 'none';
+      const scoreDiv = document.getElementById('score-container');
+      scoreDiv.style.display = 'block';
+      scoreDiv.innerText = `Du hast ${score} von ${quizData.length} Punkten erreicht!`;
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
